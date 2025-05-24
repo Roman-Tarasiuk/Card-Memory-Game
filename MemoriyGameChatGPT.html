@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Гра на запам'ятовування карт</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 100px);
+      grid-gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .card {
+      width: 100px;
+      height: 145px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+    }
+    .target {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Гра на запам'ятовування карт</h1>
+  <div class="grid" id="cardGrid"></div>
+  <div class="target">
+    <h2>Знайди цю карту:</h2>
+    <img id="targetCard" class="card" src="" alt="Цільова карта">
+  </div>
+  <script>
+    const cardNames = [
+      'ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king'
+    ];
+    const suits = ['spades', 'hearts', 'clubs', 'diamonds'];
+    const allCards = [];
+
+    for (const suit of suits) {
+      for (const name of cardNames) {
+        allCards.push(`${name}_of_${suit}.svg`);
+      }
+    }
+
+    const backCard = 'back.svg';
+    const cardGrid = document.getElementById('cardGrid');
+    const targetCardEl = document.getElementById('targetCard');
+
+    let shownCards = [];
+    let targetCard = '';
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function setupGame() {
+      cardGrid.innerHTML = '';
+      const cardsCopy = [...allCards];
+      shuffle(cardsCopy);
+      shownCards = cardsCopy.slice(0, 25);
+
+      shownCards.forEach((card, index) => {
+        const img = document.createElement('img');
+        img.src = `./img/${card}`;
+        img.className = 'card';
+        img.dataset.card = card;
+        img.addEventListener('click', handleCardClick);
+        cardGrid.appendChild(img);
+      });
+
+      targetCard = shownCards[Math.floor(Math.random() * shownCards.length)];
+      targetCardEl.src = `./img/${targetCard}`;
+
+      setTimeout(hideCards, 10000);
+    }
+
+    function hideCards() {
+      const imgs = document.querySelectorAll('#cardGrid img');
+      imgs.forEach(img => {
+        img.src = `./img/${backCard}`;
+      });
+    }
+
+    function handleCardClick(e) {
+      const clickedCard = e.target.dataset.card;
+      if (!clickedCard) return;
+
+      if (clickedCard === targetCard) {
+        alert('Правильно!');
+      } else {
+        alert('Неправильно, спробуй ще раз!');
+      }
+    }
+
+    window.onload = setupGame;
+  </script>
+</body>
+</html>
