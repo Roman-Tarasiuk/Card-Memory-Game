@@ -10,7 +10,8 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(5, 100px);
+      /* Number of columns. */
+      grid-template-columns: repeat(4, 100px);
       grid-gap: 10px;
       justify-content: center;
       margin: 20px 0;
@@ -19,7 +20,6 @@
       width: 100px;
       height: 145px;
       cursor: pointer;
-      border: 1px solid #ccc;
     }
     .target {
       margin-top: 20px;
@@ -33,6 +33,7 @@
     <h2>Знайди цю карту:</h2>
     <img id="targetCard" class="card" src="" alt="Цільова карта">
   </div>
+
   <script>
     const cardNames = [
       'ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king'
@@ -64,7 +65,8 @@
       cardGrid.innerHTML = '';
       const cardsCopy = [...allCards];
       shuffle(cardsCopy);
-      shownCards = cardsCopy.slice(0, 25);
+      // Number of cards.
+      shownCards = cardsCopy.slice(0, 12);
 
       shownCards.forEach((card, index) => {
         const img = document.createElement('img');
@@ -76,7 +78,7 @@
       });
 
       targetCard = shownCards[Math.floor(Math.random() * shownCards.length)];
-      targetCardEl.src = `./img/${targetCard}`;
+      targetCardEl.src = `./img/${backCard}`;
 
       setTimeout(hideCards, 10000);
     }
@@ -86,6 +88,8 @@
       imgs.forEach(img => {
         img.src = `./img/${backCard}`;
       });
+
+      targetCardEl.src = `./img/${targetCard}`;
     }
 
     function handleCardClick(e) {
